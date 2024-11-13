@@ -23,7 +23,14 @@
 #define MAESTRO_H
 
 #include <stdio.h>
+#include <stdlib.h>
 
-void maestro(void);
+typedef struct {
+    int *data;
+    size_t size;
+} imaestro;
+
+imaestro* imaestro_new();
+void imaestro_append(imaestro* ptr_imaestro, int value);
 
 #endif //MAESTRO_H
