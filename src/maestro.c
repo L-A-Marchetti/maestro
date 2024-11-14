@@ -43,6 +43,7 @@ maestro* maestro_new(size_t element_size)
     ptr_maestro->destroy = maestro_destroy;
     ptr_maestro->pop_back = maestro_pop_back;
     ptr_maestro->insert = maestro_insert;
+    ptr_maestro->erase = maestro_erase;
     return ptr_maestro;
 }
 
@@ -171,4 +172,48 @@ void maestro_insert(maestro* ptr_maestro, int pos, const void* value)
         ptr_maestro->element_size
     );
     ptr_maestro->length++;
+}
+
+/**
+  * @brief Erase an element at a specific position from the maestro instance.
+  *
+  * This function removes the element at the specified position and shifts
+  * subsequent elements to the left. If the maestro instance becomes empty,
+  * it frees the memory and sets the data pointer to NULL.
+  *
+  * @param ptr_maestro Pointer to the maestro instance.
+  * @param pos Position of the element to erase.
+  */
+void maestro_erase(maestro *ptr_maestro, int pos)
+{
+    if (ptr_maestro == NULL)
+    {
+        fprintf(stderr, "Pointer to maestro is NULL\n");
+        return;
+    }    
+    if (pos < 0 || pos >= (int)ptr_maestro->length)
+    {
+        fprintf(stderr, "Invalid position: %d\n", pos);
+        return;
+    }
+    if (ptr_maestro->length == 1)
+    {
+        free(ptr_maestro->data);
+        ptr_maestro->data = NULL;
+        ptr_maestro->length = 0;
+        return;
+    }
+    memmove(
+        (char*)ptr_maestro->data + pos * ptr_maestro->element_size,
+        (char*)ptr_maestro->data + (pos + 1) * ptr_maestro->element_size,
+        (ptr_maestro->length - pos - 1) * ptr_maestro->element_size
+    );
+    void* new_data = realloc(ptr_maestro->data, (ptr_maestro->length - 1) * ptr_maestro->element_size);
+    if (new_data == NULL)
+    {
+        fprintf(stderr, "Unable to allocate or reallocate memory\n");
+        return;
+    }
+    ptr_maestro->data = new_data;
+    ptr_maestro->length--;
 }

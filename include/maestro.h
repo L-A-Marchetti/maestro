@@ -48,13 +48,14 @@
   * length, and function pointers for manipulating the array.
   */
 typedef struct maestro {
-    void* data;                       /**< Pointer to the array data */
-    size_t element_size;              /**< Size of each element in bytes */
-    size_t length;                    /**< Current number of elements in the array */
+    void* data; /**< Pointer to the array data */
+    size_t element_size; /**< Size of each element in bytes */
+    size_t length; /**< Current number of elements in the array */
     void (*push_back)(struct maestro* ptr_maestro, const void* value); /**< Function to add an element */
-    void (*destroy)(struct maestro* ptr_maestro);                        /**< Function to destroy all elements */
-    void (*pop_back)(struct maestro* ptr_maestro);                     /**< Function to remove the last element */
+    void (*destroy)(struct maestro* ptr_maestro); /**< Function to destroy all elements */
+    void (*pop_back)(struct maestro* ptr_maestro); /**< Function to remove the last element */
     void (*insert)(struct maestro* ptr_maestro, int pos, const void* value); /**< Function to insert an element at a specific position */
+    void (*erase)(struct maestro* ptr_maestro, int pos); /**< Function to erase an element at a specific position */
 } maestro;
 
 /**
@@ -102,14 +103,22 @@ void maestro_pop_back(maestro* ptr_maestro);
 /**
   * @brief Insert a new element at a specific position in the maestro instance.
   *
-  * This function reallocates memory to accommodate the new element and shifts
-  * existing elements to the right to make space for the new element at the
-  * specified position.
+  * This function reallocates memory to accommodate the new element.
   *
   * @param ptr_maestro Pointer to the maestro instance.
   * @param pos Position at which to insert the new element.
   * @param value Pointer to the value to be inserted.
   */
 void maestro_insert(maestro* ptr_maestro, int pos, const void* value);
+
+/**
+  * @brief Erase an element at a specific position from the maestro instance.
+  *
+  * This function removes the element at the specified position.
+  *
+  * @param ptr_maestro Pointer to the maestro instance.
+  * @param pos Position of the element to erase.
+  */
+void maestro_erase(maestro* ptr_maestro, int pos);
 
 #endif // MAESTRO_H
