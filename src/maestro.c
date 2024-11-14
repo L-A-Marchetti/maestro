@@ -39,8 +39,9 @@ maestro* maestro_new(size_t element_size)
     ptr_maestro->data = NULL;
     ptr_maestro->length = DEFAULT_LENGTH;
     ptr_maestro->element_size = element_size;
-    ptr_maestro->append = maestro_append;
+    ptr_maestro->push_back = maestro_push_back;
     ptr_maestro->erase = maestro_erase;
+    ptr_maestro->pop_back = maestro_pop_back;
     return ptr_maestro;
 }
 
@@ -54,7 +55,7 @@ maestro* maestro_new(size_t element_size)
   *         is responsible for managing any dynamic memory within the element.
   * @retval None
   */
-void maestro_append(maestro* ptr_maestro, const void* value) {
+void maestro_push_back(maestro* ptr_maestro, const void* value) {
     if (ptr_maestro == NULL)
     {
         fprintf(stderr, "Pointer to maestro is NULL\n");
@@ -91,4 +92,39 @@ void maestro_erase(maestro *ptr_maestro)
     }
     free(ptr_maestro->data);
     free(ptr_maestro);
+}
+
+
+/**
+  * @brief  Remove the last element from the maestro instance.
+  * @param  ptr_maestro: Pointer to the maestro instance.
+  * @note   This function reduces the length of the maestro instance by one.
+  * @note   If the maestro instance is empty, it frees the memory and sets
+  *         the data pointer to NULL.
+  *         If reallocation fails while attempting to shrink the memory,
+  *         the original data remains unchanged and an error message is printed.
+  * @retval None
+  */
+void maestro_pop_back(maestro *ptr_maestro)
+{
+    if (ptr_maestro == NULL)
+    {
+        fprintf(stderr, "Pointer to maestro is NULL\n");
+        return;
+    }
+    if (ptr_maestro->length-1 == 0)
+    {
+        free(ptr_maestro->data);
+        ptr_maestro->data = NULL;
+        ptr_maestro->length = 0;
+        return;
+    }
+    void* new_data = realloc(ptr_maestro->data, (ptr_maestro->length - 1) * ptr_maestro->element_size);
+    if (new_data == NULL)
+    {
+        fprintf(stderr, "Unable to allocate or reallocate memory\n");
+        return;
+    }
+    ptr_maestro->data = new_data;
+    ptr_maestro->length--;
 }

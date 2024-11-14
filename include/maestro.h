@@ -32,12 +32,14 @@ typedef struct maestro {
     void* data;
     size_t element_size;
     size_t length;
-    void (*append)(struct maestro* ptr_maestro, const void* value);
+    void (*push_back)(struct maestro* ptr_maestro, const void* value);
     void (*erase)(struct maestro* ptr_maestro);
+    void (*pop_back)(struct maestro* ptr_maestro);
 } maestro;
 
 maestro* maestro_new(size_t element_size);
-void maestro_append(maestro* ptr_maestro, const void* value);
+void maestro_push_back(maestro* ptr_maestro, const void* value);
 void maestro_erase(maestro* ptr_maestro);
+void maestro_pop_back(maestro* ptr_maestro);
 
 #endif //MAESTRO_H

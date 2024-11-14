@@ -8,9 +8,12 @@ int main()
     } human;
     human lucas = {14, "Lucas"};
     human mathias = {35, "Mathias"};
+    human marie = {18, "Marie"};
     maestro* humans = maestro_new(sizeof(human));
-    humans->append(humans, &lucas);
-    humans->append(humans, &mathias);
+    humans->push_back(humans, &lucas);
+    humans->push_back(humans, &mathias);
+    humans->push_back(humans, &marie);
+    humans->pop_back(humans);
     for (size_t i = 0; i < humans->length; i++) {
     printf("age: %d, name: %s\n", 
            ((human*)humans->data)[i].age,
