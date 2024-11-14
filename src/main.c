@@ -14,11 +14,12 @@ int main()
     humans->push_back(humans, &mathias);
     humans->push_back(humans, &marie);
     humans->pop_back(humans);
+    humans->insert(humans, 1, &marie);
     for (size_t i = 0; i < humans->length; i++) {
     printf("age: %d, name: %s\n", 
            ((human*)humans->data)[i].age,
            ((human*)humans->data)[i].name);
 }
-    humans->erase(humans);
+    humans->destroy(humans);
     return 0;
 }

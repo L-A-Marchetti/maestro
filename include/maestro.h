@@ -52,7 +52,7 @@ typedef struct maestro {
     size_t element_size;              /**< Size of each element in bytes */
     size_t length;                    /**< Current number of elements in the array */
     void (*push_back)(struct maestro* ptr_maestro, const void* value); /**< Function to add an element */
-    void (*erase)(struct maestro* ptr_maestro);                        /**< Function to erase all elements */
+    void (*destroy)(struct maestro* ptr_maestro);                        /**< Function to destroy all elements */
     void (*pop_back)(struct maestro* ptr_maestro);                     /**< Function to remove the last element */
     void (*insert)(struct maestro* ptr_maestro, int pos, const void* value); /**< Function to insert an element at a specific position */
 } maestro;
@@ -80,14 +80,14 @@ maestro* maestro_new(size_t element_size);
 void maestro_push_back(maestro* ptr_maestro, const void* value);
 
 /**
-  * @brief Erase a maestro instance and free associated memory.
+  * @brief Destroy a maestro instance and free associated memory.
   *
   * This function frees both the data array and the maestro
   * structure itself.
   *
   * @param ptr_maestro Pointer to the maestro instance.
   */
-void maestro_erase(maestro* ptr_maestro);
+void maestro_destroy(maestro* ptr_maestro);
 
 /**
   * @brief Remove the last element from the maestro instance.
@@ -98,5 +98,18 @@ void maestro_erase(maestro* ptr_maestro);
   * @param ptr_maestro Pointer to the maestro instance.
   */
 void maestro_pop_back(maestro* ptr_maestro);
+
+/**
+  * @brief Insert a new element at a specific position in the maestro instance.
+  *
+  * This function reallocates memory to accommodate the new element and shifts
+  * existing elements to the right to make space for the new element at the
+  * specified position.
+  *
+  * @param ptr_maestro Pointer to the maestro instance.
+  * @param pos Position at which to insert the new element.
+  * @param value Pointer to the value to be inserted.
+  */
+void maestro_insert(maestro* ptr_maestro, int pos, const void* value);
 
 #endif // MAESTRO_H

@@ -40,8 +40,9 @@ maestro* maestro_new(size_t element_size)
     ptr_maestro->length = DEFAULT_LENGTH;
     ptr_maestro->element_size = element_size;
     ptr_maestro->push_back = maestro_push_back;
-    ptr_maestro->erase = maestro_erase;
+    ptr_maestro->destroy = maestro_destroy;
     ptr_maestro->pop_back = maestro_pop_back;
+    ptr_maestro->insert = maestro_insert;
     return ptr_maestro;
 }
 
@@ -77,13 +78,13 @@ void maestro_push_back(maestro* ptr_maestro, const void* value) {
 }
 
 /**
-  * @brief  Erase a maestro instance and free associated memory.
+  * @brief  Destroy a maestro instance and free associated memory.
   * @param  ptr_maestro: Pointer to the maestro instance to be erased.
   * @note   This function frees both the data array and the maestro structure itself.
   * @note   After calling this function, the ptr_maestro should not be used anymore.
   * @retval None
   */
-void maestro_erase(maestro *ptr_maestro)
+void maestro_destroy(maestro *ptr_maestro)
 {
     if (ptr_maestro == NULL)
     {
@@ -127,4 +128,47 @@ void maestro_pop_back(maestro *ptr_maestro)
     }
     ptr_maestro->data = new_data;
     ptr_maestro->length--;
+}
+
+/**
+  * @brief Insert a new element at a specific position in the maestro instance.
+  *
+  * This function reallocates memory to accommodate the new element and shifts
+  * existing elements to the right to make space for the new element at the
+  * specified position.
+  *
+  * @param ptr_maestro Pointer to the maestro instance.
+  * @param pos Position at which to insert the new element.
+  * @param value Pointer to the value to be inserted.
+  */
+void maestro_insert(maestro* ptr_maestro, int pos, const void* value)
+{
+    if (ptr_maestro == NULL)
+    {
+        fprintf(stderr, "Pointer to maestro is NULL\n");
+        return;
+    }
+    if (pos < 0 || pos > (int)ptr_maestro->length)
+    {
+        fprintf(stderr, "Invalid position: %d\n", pos);
+        return;
+    }
+    void* new_data = realloc(ptr_maestro->data, (ptr_maestro->length + 1) * ptr_maestro->element_size);
+    if (new_data == NULL)
+    {
+        fprintf(stderr, "Unable to allocate or reallocate memory\n");
+        return;
+    }
+    ptr_maestro->data = new_data;
+    memmove(
+        (char*)ptr_maestro->data + (pos + 1) * ptr_maestro->element_size,
+        (char*)ptr_maestro->data + pos * ptr_maestro->element_size,
+        (ptr_maestro->length - pos) * ptr_maestro->element_size
+    );
+    memcpy(
+        (char*)ptr_maestro->data + pos * ptr_maestro->element_size,
+        value,
+        ptr_maestro->element_size
+    );
+    ptr_maestro->length++;
 }
