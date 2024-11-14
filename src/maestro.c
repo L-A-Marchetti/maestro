@@ -1,44 +1,49 @@
 #include "../include/maestro.h"
 
-imaestro* imaestro_new()
+maestro* maestro_new(size_t element_size)
 {
-    imaestro* ptr_imaestro = (imaestro*)malloc(sizeof(imaestro));
-    if (ptr_imaestro == NULL)
+    maestro* ptr_maestro = (maestro*)malloc(sizeof(maestro));
+    if (ptr_maestro == NULL)
     {
-        fprintf(stderr, "Unable to create the new imaestro\n");
+        fprintf(stderr, "Unable to create a new maestro instance");
         return NULL;
     }
-    ptr_imaestro->data = NULL;
-    ptr_imaestro->size = DEFAULT_SIZE;
-    ptr_imaestro->append = imaestro_append;
-    ptr_imaestro->erase = imaestro_erase;
-    return ptr_imaestro;
+    ptr_maestro->data = NULL;
+    ptr_maestro->length = DEFAULT_LENGTH;
+    ptr_maestro->element_size = element_size;
+    ptr_maestro->append = maestro_append;
+    ptr_maestro->erase = maestro_erase;
+    return ptr_maestro;
 }
 
-void imaestro_append(imaestro* ptr_imaestro, int value) {
-    if (ptr_imaestro == NULL)
+void maestro_append(maestro* ptr_maestro, const void* value) {
+    if (ptr_maestro == NULL)
     {
-        fprintf(stderr, "Pointer to imaestro is NULL\n");
+        fprintf(stderr, "Pointer to maestro is NULL\n");
         return;
     }
-    int *new_data = (int*)realloc(ptr_imaestro->data, (ptr_imaestro->size + 1) * sizeof(int));
+    void* new_data = realloc(ptr_maestro->data, (ptr_maestro->length + 1) * ptr_maestro->element_size);
     if (new_data == NULL)
     {
         fprintf(stderr, "Unable to allocate or reallocate memory\n");
         return;
     }
-    ptr_imaestro->data = new_data;
-    ptr_imaestro->data[ptr_imaestro->size] = value;
-    ptr_imaestro->size++;
+    ptr_maestro->data = new_data;
+    memcpy(
+        (char*)ptr_maestro->data + (ptr_maestro->length * ptr_maestro->element_size),
+        value,
+        ptr_maestro->element_size
+    );
+    ptr_maestro->length++;
 }
 
-void imaestro_erase(imaestro *ptr_imaestro)
+void maestro_erase(maestro *ptr_maestro)
 {
-    if (ptr_imaestro == NULL)
+    if (ptr_maestro == NULL)
     {
-        fprintf(stderr, "Pointer to imaestro is NULL\n");
+        fprintf(stderr, "Pointer to maestro is NULL\n");
         return;
     }
-    free(ptr_imaestro->data);
-    free(ptr_imaestro);
+    free(ptr_maestro->data);
+    free(ptr_maestro);
 }
