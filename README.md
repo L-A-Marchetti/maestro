@@ -69,7 +69,7 @@ The library stores elements in contiguous memory locations, which means all elem
 
 ## Installation
 
-Maestro can be easily installed using the provided installation script:
+Maestro can be easily installed by downloading the [last version](https://github.com/L-A-Marchetti/maestro/releases) and using the provided installation script:
 
 ```bash
 ./install.sh
