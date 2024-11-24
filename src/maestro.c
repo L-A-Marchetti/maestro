@@ -9,7 +9,7 @@
   **********************************************
   * @file   maestro.c
   * @author Lucas Anatole Marchetti
-  * @brief  A Dynamic Array Library for C 
+  * @brief  A C Dynamic Array Library
   * @version 1.0.0
   **********************************************
   * @attention

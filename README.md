@@ -1,4 +1,4 @@
-# Maestro - A Dynamic Array Library for C
+# Maestro - A C Dynamic Array Library
 
 # Table of Contents
 
