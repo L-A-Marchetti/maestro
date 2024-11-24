@@ -196,9 +196,9 @@ int main()
 
     // Display array contents
     for (size_t i = 0; i < items->length; i++) {
-        Item* current = &((Item*)items->data)[i];
+        Item current = ((Item*)items->data)[i];
         printf("Id: %d, Value: %.1f, Name: %s\n", 
-               current->id, current->value, current->name);
+               current.id, current.value, current.name);
     }
 
     // Clean up
