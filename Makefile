@@ -1,10 +1,10 @@
-TARGET = maestro
+TARGET = maestro.o
 BUILD = build
 CC = gcc
-SRC = src/main.c src/maestro.c
+SRC = src/maestro.c
 FLAGS = -Wall -Wextra -Werror -pedantic -fstack-protector-strong
 
 $(TARGET): $(SRC)
-	@$(CC) $(FLAGS) -o $(BUILD)/$(TARGET) $(SRC)
-	@chmod +x $(BUILD)/$(TARGET)
-	@./$(BUILD)/$(TARGET)
+	@$(CC) $(FLAGS) -c $(SRC) -o $(BUILD)/$(TARGET)
+	@ar rcs $(BUILD)/libmaestro.a $(BUILD)/$(TARGET)
+	@rm $(BUILD)/$(TARGET)

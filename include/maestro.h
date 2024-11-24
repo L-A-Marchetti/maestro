@@ -9,8 +9,8 @@
   **********************************************
   * @file   maestro.h
   * @author Lucas Anatole Marchetti
-  * @brief  Maestro is a C library to simplify
-  *         dynamic allocations more easily.
+  * @brief  A Dynamic Array Library for C 
+  * @version 1.0.0
   **********************************************
   * @attention
   *
